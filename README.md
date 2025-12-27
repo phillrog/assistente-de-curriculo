@@ -2,6 +2,9 @@
 
 Este projeto é um **assistente inteligente** desenvolvido para ajudar candidatos a otimizarem seus currículos para vagas específicas, utilizando o poder da IA (Gemini 2.0 Flash).
 
+<img width="1918" height="962" alt="image" src="https://github.com/user-attachments/assets/76cff744-605d-40c2-8608-8e999af134c1" />
+
+
 ## 🌟 O que a aplicação faz?
 A aplicação analisa a compatibilidade entre um **currículo (PDF)** e uma **descrição de vaga**, fornecendo:
 * **Match Score:** Uma porcentagem visual de aderência técnica. 📊
@@ -87,5 +90,6 @@ Obs: Cuidado com os limites
 
 <img width="1918" height="972" alt="image" src="https://github.com/user-attachments/assets/99b97803-2770-44ad-a419-c73ee79c9825" />
 
+# Resultado
 
    
