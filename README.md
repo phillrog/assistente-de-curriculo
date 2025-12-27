@@ -93,7 +93,6 @@ A aplicação utiliza o modelo **Gemini 2.0 Flash**. Para obter sua chave gratui
 5.  Copie a chave gerada e cole-a no campo correspondente na barra lateral da aplicação.
 Obs: Cuidado com os limites
 
-<img width="1918" height="972" alt="image" src="https://github.com/user-attachments/assets/99b97803-2770-44ad-a419-c73ee79c9825" />
 
 # Resultado
 
