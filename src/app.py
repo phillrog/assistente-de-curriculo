@@ -253,8 +253,8 @@ if len(st.session_state.messages) > 0 and st.session_state.messages[-1]["role"] 
     with st.chat_message("assistant"):
         with st.spinner("Preparando resposta..."):
             analyzer = AssitenteCurriculo(api_key, temperature=temp_value)
-            analise_inicial = st.session_state.messages[0]["content"]
-            hist = f"Análise Inicial: {analise_inicial}"
+            analise_contexto = st.session_state.messages[0]["content"]
+            hist = f"CONTEXTO DA ANÁLISE:\n{analise_contexto}"
             response = analyzer.chat(st.session_state.cv_content, job_desc, hist, st.session_state.messages[-1]["content"], st.session_state.tom_estilo)
             st.markdown(response)
             st.session_state.messages.append({"role": "assistant", "content": response})
