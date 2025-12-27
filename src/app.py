@@ -115,6 +115,14 @@ with st.sidebar:
         st.rerun()
         
     st.markdown("---")
+    
+    
+    st.caption("""
+        ⚠️ **Nota de Transparência:** Este assistente oferece sugestões baseadas em processamento de dados. 
+        As recomendações não garantem aprovação em processos seletivos e devem ser validadas por você. 
+        Como uma tecnologia experimental (Gemini 2.0 Flash), as análises podem conter imprecisões.
+        """)
+    
     st.markdown(
         "<div style='text-align: center; color: #999; font-size: 12px;'>"
         "Desenvolvido por <b>Phillipe</b> | Assistente de Currículo IA v1.0"
@@ -155,7 +163,7 @@ if not st.session_state.messages:
         c2.markdown("#### 🎯 Precisão\nAjustamos seu currículo para o que a vaga pede.")
         c3.markdown("#### 💬 Mentoria\nPeça cartas, dicas e simulações de entrevista.")
 
-for msg in st.session_state.messages:
+for i,msg in enumerate(st.session_state.messages):
     with st.chat_message(msg["role"]):
         if "[RESUMO]" in msg["content"]:
             texto = msg["content"]
@@ -176,11 +184,17 @@ for msg in st.session_state.messages:
 
             # --- BOTÃO DE EXPORTAR PDF (DENTRO DO BLOCO DE ANÁLISE) ---
             pdf_bytes = gerar_relatorio_pdf(texto, score)
+            st.warning("""
+        ⚠️ **Nota de Transparência:** Este assistente oferece sugestões baseadas em processamento de dados. 
+        As recomendações não garantem aprovação em processos seletivos e devem ser validadas por você. 
+        Como uma tecnologia experimental (Gemini 2.0 Flash), as análises podem conter imprecisões.
+        """)
             st.download_button(
                 label="📥 Baixar Análise em PDF",
                 data=pdf_bytes,
                 file_name=f"Analise_Carreira_{datetime.now().strftime('%d%m%Y')}.pdf",
-                mime="application/pdf"
+                mime="application/pdf",
+                key=f"btn_download_{i}"
             )
             # --------------------------------------------------------
 
@@ -212,8 +226,15 @@ for msg in st.session_state.messages:
             if len(corpo_extra) > 50:
                 st.markdown("---")
                 st.markdown(corpo_extra)
+                
+            st.warning("""
+        ⚠️ **Nota de Transparência:** Este assistente oferece sugestões baseadas em processamento de dados. 
+        As recomendações não garantem aprovação em processos seletivos e devem ser validadas por você. 
+        Como uma tecnologia experimental (Gemini 2.0 Flash), as análises podem conter imprecisões.
+        """)
         else:
             st.markdown(msg["content"])
+        
 
 if prompt := st.chat_input("Pergunte algo ao Assistente..."):
     if not st.session_state.cv_content:
@@ -222,11 +243,18 @@ if prompt := st.chat_input("Pergunte algo ao Assistente..."):
         st.session_state.messages.append({"role": "user", "content": prompt})
         st.rerun()
 
+st.warning("""
+        ⚠️ **Nota de Transparência:** Este assistente oferece sugestões baseadas em processamento de dados. 
+        As recomendações não garantem aprovação em processos seletivos e devem ser validadas por você. 
+        Como uma tecnologia experimental (Gemini 2.0 Flash), as análises podem conter imprecisões.
+        """)
+
 if len(st.session_state.messages) > 0 and st.session_state.messages[-1]["role"] == "user":
     with st.chat_message("assistant"):
         with st.spinner("Preparando resposta..."):
             analyzer = AssitenteCurriculo(api_key, temperature=temp_value)
-            hist = "\n".join([f"{m['role']}: {m['content']}" for m in st.session_state.messages[-3:]])
+            analise_inicial = st.session_state.messages[0]["content"]
+            hist = f"Análise Inicial: {analise_inicial}"
             response = analyzer.chat(st.session_state.cv_content, job_desc, hist, st.session_state.messages[-1]["content"], st.session_state.tom_estilo)
             st.markdown(response)
             st.session_state.messages.append({"role": "assistant", "content": response})

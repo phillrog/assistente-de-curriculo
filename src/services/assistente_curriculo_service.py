@@ -47,20 +47,38 @@ class AssitenteCurriculo:
         Sempre termine sua resposta com uma "PERGUNTA DE MENTOR" desafiadora para o usuário. 
         Exemplo: "Quer que eu simule uma pergunta difícil desta vaga para você treinar?" ou 
         "Gostaria que eu escrevesse uma mensagem de abordagem para você enviar ao recrutador no LinkedIn?"
+        
+        {formato_instrucao}
         """
         
         self.prompt = PromptTemplate.from_template(self.template)
         self.chain = self.prompt | self.llm | StrOutputParser()
 
-    # CORREÇÃO AQUI: Adicionado tone_style como argumento
+    # Adicionado tone_style como argumento
     def chat(self, cv_text, job_text, history, user_input, tone_style):
         try:
+            if not history:
+                # Primeira análise: Exige o relatório completo
+                instrucao = """
+                ### FORMATO OBRIGATÓRIO DE RESPOSTA:
+                Gere o relatório técnico usando EXATAMENTE estas tags:
+                [RESUMO], [PONTOS_FORTES], [GAPS], [SUGESTOES], [DICAS_OURO], [NOTA].
+                """
+            else:
+                # Chat contínuo: Conversa natural como assistente
+                instrucao = """
+                ### MODO DE CONVERSA ATIVO:
+                O relatório já foi entregue. Agora, responda como um mentor de carreira.
+                Responda de forma direta, amigável e natural à pergunta do usuário: "{user_input}"
+                NÃO use as [RESUMO], [PONTOS_FORTES], [GAPS], [SUGESTOES], [DICAS_OURO], [NOTA]. Mantenha a conversa fluida.".
+                """
             return self.chain.invoke({
                 "candidate_cv": cv_text,
                 "job_description": job_text,
                 "chat_history": history,
                 "user_input": user_input,
-                "style_choice": tone_style
+                "style_choice": tone_style,
+                "formato_instrucao": instrucao
             })
         except Exception as e:
             return f"Erro na análise: {str(e)}"
