@@ -1,4 +1,4 @@
-name: Integração Contínua - Assistente de Currículo
+name: Build - Assistente de Currículo
 
 on:
   push:
