@@ -222,7 +222,7 @@ if prompt := st.chat_input("Pergunte algo ao Assistente..."):
 if len(st.session_state.messages) > 0 and st.session_state.messages[-1]["role"] == "user":
     with st.chat_message("assistant"):
         with st.spinner("Preparando resposta..."):
-            analyzer = CandidateAnalyzer(api_key, temperature=temp_value)
+            analyzer = AssitenteCurriculo(api_key, temperature=temp_value)
             hist = "\n".join([f"{m['role']}: {m['content']}" for m in st.session_state.messages[-3:]])
             response = analyzer.chat(st.session_state.cv_content, job_desc, hist, st.session_state.messages[-1]["content"], st.session_state.tom_estilo)
             st.markdown(response)
