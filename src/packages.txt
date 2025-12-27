@@ -1,0 +1,3 @@
+libcap-dev
+libwebpmux3
+libcairo2-dev
