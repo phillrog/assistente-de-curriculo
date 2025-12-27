@@ -1,4 +1,8 @@
+# [![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://ai-assistente-de-curriculo.streamlit.app)
+
 # 🤖 Assistente de Currículo IA
+
+
 
 Este projeto é um **assistente inteligente** desenvolvido para ajudar candidatos a otimizarem seus currículos para vagas específicas, utilizando o poder da IA (Gemini 2.0 Flash).
 
