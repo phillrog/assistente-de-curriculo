@@ -97,5 +97,6 @@ Obs: Cuidado com os limites
 
 # Resultado
 
-   
+   ![assistente-cv](https://github.com/user-attachments/assets/fd1beda9-2e08-4615-8184-5101daf7e5a3)
+
 
