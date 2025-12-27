@@ -6,7 +6,8 @@
 
 Este projeto é um **assistente inteligente** desenvolvido para ajudar candidatos a otimizarem seus currículos para vagas específicas, utilizando o poder da IA (Gemini 2.0 Flash).
 
-<img width="1918" height="962" alt="image" src="https://github.com/user-attachments/assets/76cff744-605d-40c2-8608-8e999af134c1" />
+<img width="1918" height="972" alt="image" src="https://github.com/user-attachments/assets/3b314e7d-cbc5-4a9a-a429-345b2e73a77c" />
+
 
 
 ## 🌟 O que a aplicação faz?
@@ -96,4 +97,5 @@ Obs: Cuidado com os limites
 
 # Resultado
 
-   
+   ![assistente-cv](https://github.com/user-attachments/assets/5c333d1a-6c86-4422-ab85-653cbfc3ddcd)
+
