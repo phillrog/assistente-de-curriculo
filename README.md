@@ -6,7 +6,7 @@
 
 Este projeto é um **assistente inteligente** desenvolvido para ajudar candidatos a otimizarem seus currículos para vagas específicas, utilizando o poder da IA (Gemini 2.0 Flash).
 
-<img width="1918" height="972" alt="image" src="https://github.com/user-attachments/assets/3b314e7d-cbc5-4a9a-a429-345b2e73a77c" />
+<img width="1908" height="1007" alt="image" src="https://github.com/user-attachments/assets/e1534d72-adb3-4c02-a847-84b5743d32d8" />
 
 
 
@@ -97,6 +97,13 @@ A inteligência do sistema baseia-se em um prompt estruturado que utiliza técni
 
         -   *Referência:* [Harvard Business Review - How to Design a Resume for ATS](https://www.google.com/search?q=https://hbr.org/2022/01/how-to-design-a-resume-for-applicant-tracking-systems)
 
+-   **Análise de Narrativa (Career Storytelling):** Esta técnica vai além da análise estática de palavras-chave. Ela foca na **coerência da trajetória** do candidato, transformando descrições passivas de cargos em narrativas de resolução de problemas e evolução profissional.
+
+    -   *Referência:* [HBR - The Art of Career Storytelling](https://www.google.com/search?q=https://hbr.org/2016/01/the-art-of-career-storytelling) | [Forbes - Why Storytelling Is The Future Of Resumes](https://www.google.com/search?q=https://www.forbes.com/sites/forbeshumanresourcescouncil/2021/04/14/why-storytelling-is-the-future-of-the-resume/)
+
+-   **Curadoria de Estudos (Upskilling & Gap Bridging):** Implementa o conceito de **"Recolocação Orientada ao Aprendizado"**, transformando cada falha técnica identificada em um plano de ação prático por meio de links diretos para recursos educativos.
+
+    -   *Referência:* [Roadmap.sh - Learning Paths](https://roadmap.sh/) | [World Economic Forum - Reskilling Revolution](https://www.weforum.org/agenda/2020/01/reskilling-revolution-jobs-future-skills/)
 
 **Exemplo do Prompt Renderizado:**
 
@@ -142,6 +149,12 @@ DIRETRIZES TÁTICAS PARA O ALTO IMPACTO:
 2. MÉTODO STAR: Escolha a experiência mais relevante do currículo e sugira uma reescrita rápida: (S)ituação, (T)arefa, (A)ção e (R)esultado quantificável.
 3. MITIGAÇÃO DE GAPS: Para cada falha técnica, dê uma "saída estratégica". Como o candidato pode compensar esse gap?
 4. FONTES E LINKS: Sempre que sugerir o estudo de uma tecnologia ou ferramenta (ex: Python, AWS, Scrum), procure fornecer um link de fonte confiável (Documentação oficial, Coursera, Udemy ou Microsoft Learn) para o candidato se aprofundar.
+5. ANÁLISE DE NARRATIVA (STORYTELLING): Avalie se o currículo conta uma história de progressão clara. Se o currículo parecer uma "lista de tarefas", sugira como transformar essas tarefas em conquistas que demonstrem liderança ou autonomia, alinhadas à cultura de empresas tech modernas.
+6. CURADORIA DE ESTUDOS (LINKS): Para cada GAP técnico identificado, você deve obrigatoriamente fornecer um link direto para aprendizado. Priorize:
+- Documentações Oficiais (ex: react.dev, docs.python.org);
+- Cursos Gratuitos (Microsoft Learn, Google Cloud Skills Boost, Coursera);
+- Roadmap.sh para visualização de carreira.
+- Formato: [Nome do Recurso](URL).
 
 [RESUMO] -> (Análise direta baseada no TOM: Seja encorajador, empático e amigável. Foque no potencial e no crescimento.)
 [PONTOS_FORTES] -> (Destaque o que torna este candidato ideal)
