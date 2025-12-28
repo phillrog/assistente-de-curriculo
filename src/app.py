@@ -5,6 +5,7 @@ from datetime import datetime
 from services.assistente_curriculo_service import AssitenteCurriculo 
 from utils.formatadores import extrair_secao, limpar_estilo
 from utils.pdf_utils import gerar_relatorio_pdf
+from utils.logger import StreamlitLogger
 from components.ui_elements import renderizar_cabecalho, renderizar_gauge, exibir_manual
 
 # 1. Configuração da página
@@ -19,16 +20,35 @@ def limpar_sessao():
     st.session_state.messages = []
     st.session_state.cv_content = ""
     st.session_state.logs = []
+    st.session_state.ultimo_prompt = ""
 
 # 2. Inicialização do Estado (Session State)
 if "messages" not in st.session_state: st.session_state.messages = []
 if "cv_content" not in st.session_state: st.session_state.cv_content = ""
 if "tom_estilo" not in st.session_state: st.session_state.tom_estilo = "Seja encorajador, empático e amigável. Foque no potencial e no crescimento."
-if "logs" not in st.session_state: st.session_state.logs = [] 
+if "logs" not in st.session_state: st.session_state.logs = []
+if "ultimo_prompt" not in st.session_state: st.session_state.ultimo_prompt = ""
 
 def adicionar_log(mensagem):
     hora = datetime.now().strftime("%H:%M:%S")
     st.session_state.logs.append(f"[{hora}] {mensagem}")
+    
+
+# Instanciamos o logger global do app aqui
+logger_visual = StreamlitLogger(adicionar_log)
+
+def resolve_assistente(api_key, temp):
+    """
+    Esta função atua como container de DI. 
+    Ela resolve as dependências e injeta o logger no assistente.
+    """
+    
+    # 2. Injetamos as dependências no serviço
+    return AssitenteCurriculo(
+        api_key=api_key, 
+        logger=logger_visual, 
+        temperature=temp
+    )    
 
 # 3. Interface Visual Fixa
 renderizar_cabecalho()
@@ -85,7 +105,7 @@ with st.sidebar:
 
     if btn_iniciar:
         if api_key and job_desc and uploaded_file:
-            adicionar_log("Iniciando processo de análise...")
+            logger_visual.info("Iniciando processo de análise...")
             with main_placeholder.container():
                 st.markdown(f"""
                     <div class="loader-overlay">
@@ -96,15 +116,15 @@ with st.sidebar:
                 """, unsafe_allow_html=True)
 
                 try:
-                    adicionar_log("Lendo arquivo PDF...")
+                    logger_visual.info("Lendo arquivo PDF...")
                     reader = PdfReader(uploaded_file)
                     st.session_state.cv_content = "".join([p.extract_text() for p in reader.pages])
-                    adicionar_log(f"PDF lido: {len(st.session_state.cv_content)} caracteres extraídos.")
+                    logger_visual.info(f"PDF lido: {len(st.session_state.cv_content)} caracteres extraídos.")
                     
-                    adicionar_log("Conectando ao Gemini 2.0 Flash via LangChain...")
-                    analyzer = AssitenteCurriculo(api_key, temperature=temp_value)
-                    
-                    adicionar_log("Enviando prompt de análise estratégica...")
+                    logger_visual.info("Conectando ao Gemini 2.0 Flash via LangChain...")
+                    analyzer = resolve_assistente(api_key, temp_value)
+                                        
+                    logger_visual.info("Enviando prompt de análise estratégica...")
                     res = analyzer.chat(
                         st.session_state.cv_content, 
                         job_desc, 
@@ -113,20 +133,23 @@ with st.sidebar:
                         st.session_state.tom_estilo
                     )
                     
-                    adicionar_log("Análise recebida com sucesso!")
+                    # Pega o prompt que acabou de ser gerado e salva na sessão
+                    st.session_state.ultimo_prompt = analyzer.ultimo_prompt_renderizado
+                    
+                    logger_visual.info("Análise recebida com sucesso!")
                     st.session_state.messages = [{"role": "assistant", "content": res}] 
                     
                     st.components.v1.html("""<script>var b = window.parent.document.querySelector('button[data-testid="stSidebarCollapseButton"]'); if(b) b.click();</script>""", height=0)
                     st.rerun()
                 except Exception as e:
-                    adicionar_log(f"ERRO: {str(e)}")
+                    logger_visual.error(f"ERRO: {str(e)}")
                     main_placeholder.empty()
                     st.error(f"Erro: {e}")
         else:
             st.warning("Preencha todos os campos para continuar.")
 
     if btn_limpar:
-        adicionar_log("Limpando histórico e sessão.")
+        logger_visual.info("Limpando histórico e sessão.")
         limpar_sessao()
         st.rerun()
         
@@ -148,12 +171,41 @@ with st.sidebar:
     
     # --- LOG VISUAL (NOVA SEÇÃO) ---
     st.write("---")
-    with st.expander("🛠️ Logs do Sistema", expanded=False):
-        if st.session_state.logs:
-            for log in reversed(st.session_state.logs):
-                st.caption(log)
-        else:
-            st.caption("Aguardando atividades...")    
+    with st.expander("🛠️ Inspecionar Logs e Prompt", expanded=False):
+        tab1, tab2 = st.tabs(["Logs", "Último Prompt"])
+        with tab1:
+            if st.session_state.logs:
+                logs_para_download = "\n".join(st.session_state.logs)
+                
+                # Exibição visual na tela
+                for log in reversed(st.session_state.logs):
+                    st.caption(log)
+                    
+                st.write("---")
+        
+                # Botão de exportação do log
+                st.download_button(
+                    label="📄 Baixar Histórico de Logs",
+                    data=logs_para_download,
+                    file_name=f"logs_sessao_{datetime.now().strftime('%H%M%S')}.txt",
+                    mime="text/plain",
+                    key="btn_download_logs"
+                )
+            else:
+                st.caption("Aguardando atividades...")
+        with tab2:
+            if st.session_state.ultimo_prompt:
+                st.code(st.session_state.ultimo_prompt, language="markdown")
+                st.write("---")
+                # Botão dedicado para baixar o prompt como arquivo .txt
+                st.download_button(
+                    label="📄 Baixar Prompt Estruturado",
+                    data=st.session_state.ultimo_prompt,
+                    file_name="prompt_enviado.txt",
+                    mime="text/plain"
+                )
+            else:
+                st.caption("Nenhum prompt executado ainda.")
     
 # 6. CONTEÚDO DINÂMICO
 if not st.session_state.messages:
@@ -266,7 +318,7 @@ if prompt := st.chat_input("Pergunte algo ao Assistente..."):
     if not st.session_state.cv_content:
         st.error("Realize a análise inicial primeiro!")
     else:
-        adicionar_log(f"Usuário perguntou: '{prompt}'")
+        logger_visual.info(f"Usuário perguntou: '{prompt}'")
         st.session_state.messages.append({"role": "user", "content": prompt})
         st.rerun()
 
@@ -279,11 +331,11 @@ st.warning("""
 if len(st.session_state.messages) > 0 and st.session_state.messages[-1]["role"] == "user":
     with st.chat_message("assistant"):
         with st.spinner("Preparando resposta..."):
-            adicionar_log("Gerando resposta baseada no histórico do chat...")
-            analyzer = AssitenteCurriculo(api_key, temperature=temp_value)
+            logger_visual.info("Gerando resposta baseada no histórico do chat...")
+            analyzer = resolve_assistente(api_key, temp_value)
             analise_contexto = st.session_state.messages[0]["content"]
             hist = f"CONTEXTO DA ANÁLISE:\n{analise_contexto}"
             response = analyzer.chat(st.session_state.cv_content, job_desc, hist, st.session_state.messages[-1]["content"], st.session_state.tom_estilo)
-            adicionar_log("Resposta do chat gerada.")
+            logger_visual.info("Resposta do chat gerada.")
             st.markdown(response)
             st.session_state.messages.append({"role": "assistant", "content": response})
