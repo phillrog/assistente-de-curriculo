@@ -100,7 +100,7 @@ A inteligência do sistema baseia-se em um prompt estruturado que utiliza técni
 
 **Exemplo do Prompt Renderizado:**
 
-´´´
+```
 
 --- PROMPT ENVIADO AO GEMINI ---
 
@@ -161,7 +161,7 @@ Exemplo: "Quer que eu simule uma pergunta difícil desta vaga para você treinar
 Gere o relatório técnico usando EXATAMENTE estas tags:
 [RESUMO], [PONTOS_FORTES], [GAPS], [SUGESTOES], [DICAS_OURO], [NOTA].
 
-´´´
+```
 
 ---
 
