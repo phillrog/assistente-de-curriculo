@@ -4,16 +4,16 @@ from langchain_core.output_parsers import StrOutputParser
 from utils.logger import BaseLogger
 
 class AssitenteCurriculo:
-    def __init__(self, api_key, logger: BaseLogger, temperature=0.1):
+    def __init__(self, api_key, logger: BaseLogger, model_name="gemini-2.0-flash", temperature=0.1):
         # Armazena o prompt que será acessada pela App
         self.ultimo_prompt_renderizado = ""
         self.logger = logger
         
-        self.logger.info("Inicializando motor de IA (Gemini 2.0 Flash)...")
+        self.logger.info(f"Inicializando motor de IA ({model_name})...")
         
         try:
             self.llm = GoogleGenerativeAI(
-                model="gemini-2.0-flash",
+                model=model_name,
                 google_api_key=api_key,
                 temperature=temperature
             )
@@ -56,11 +56,17 @@ class AssitenteCurriculo:
             2. MÉTODO STAR: Escolha a experiência mais relevante do currículo e sugira uma reescrita rápida: (S)ituação, (T)arefa, (A)ção e (R)esultado quantificável.
             3. MITIGAÇÃO DE GAPS: Para cada falha técnica, dê uma "saída estratégica". Como o candidato pode compensar esse gap?
             4. FONTES E LINKS: Sempre que sugerir o estudo de uma tecnologia ou ferramenta (ex: Python, AWS, Scrum), procure fornecer um link de fonte confiável (Documentação oficial, Coursera, Udemy ou Microsoft Learn) para o candidato se aprofundar.
-
+            5. ANÁLISE DE NARRATIVA (STORYTELLING): Avalie se o currículo conta uma história de progressão clara. Se o currículo parecer uma "lista de tarefas", sugira como transformar essas tarefas em conquistas que demonstrem liderança ou autonomia, alinhadas à cultura de empresas tech modernas.
+            6. CURADORIA DE ESTUDOS (LINKS): Para cada GAP técnico identificado, você deve obrigatoriamente fornecer um link direto para aprendizado. Priorize: 
+               - Documentações Oficiais (ex: react.dev, docs.python.org); 
+               - Cursos Gratuitos (Microsoft Learn, Google Cloud Skills Boost, Coursera); 
+               - Roadmap.sh para visualização de carreira. 
+               - Formato: [Nome do Recurso](URL).
+                
             [RESUMO] -> (Análise direta baseada no TOM: {style_choice})
             [PONTOS_FORTES] -> (Destaque o que torna este candidato ideal)
             [GAPS] -> (O que falta? Seja honesto e dê a saída estratégica)
-            [SUGESTOES] -> (Plano de ação: 5 palavras-chave + 1 exemplo STAR)
+            [SUGESTOES] -> (Plano de ação: 5 palavras-chave + 1 exemplo STAR + 1 Insight de Storytelling + 📚 LINKS DE ESTUDO RECOMENDADOS)
             [DICAS_OURO] -> (Gere 3 dicas PERSONALIZADAS e acionáveis para quem busca recolocação).
             [NOTA] -> (Número de 0 a 100 baseado em match técnico real)
             

@@ -37,7 +37,7 @@ def adicionar_log(mensagem):
 # Instanciamos o logger global do app aqui
 logger_visual = StreamlitLogger(adicionar_log)
 
-def resolve_assistente(api_key, temp):
+def resolve_assistente(api_key, temp, model_name):
     """
     Esta função atua como container de DI. 
     Ela resolve as dependências e injeta o logger no assistente.
@@ -47,6 +47,7 @@ def resolve_assistente(api_key, temp):
     return AssitenteCurriculo(
         api_key=api_key, 
         logger=logger_visual, 
+        model_name=model_name,
         temperature=temp
     )    
 
@@ -61,6 +62,19 @@ with st.sidebar:
     st.title("Configurações")
     
     api_key = st.text_input("Google API Key", type="password")
+    
+    modelos_disponiveis = {
+        "Gemini 2.0 Flash": "gemini-2.0-flash",
+        "Gemini 3 Flash (Preview)": "gemini-3-flash-preview",
+    }
+    
+    modelo_selecionado = st.selectbox(
+        "Escolha o Cérebro da IA (LLM):",
+        options=list(modelos_disponiveis.keys()),
+        help=("**Gemini 2.0 Flash:** Equilíbrio perfeito entre velocidade e precisão técnica para análise de palavras-chave.\n\n"
+              "**Gemini 3 Flash (Preview):** A tecnologia mais avançada. Ideal para análise de narrativa (storytelling) e feedbacks estratégicos com velocidade ultra-rápida.\n\n")
+    )
+    model_id = modelos_disponiveis[modelo_selecionado]
 
     # SELETOR DE TOM EDITÁVEL
     st.write("---")
@@ -122,7 +136,7 @@ with st.sidebar:
                     logger_visual.info(f"PDF lido: {len(st.session_state.cv_content)} caracteres extraídos.")
                     
                     logger_visual.info("Conectando ao Gemini 2.0 Flash via LangChain...")
-                    analyzer = resolve_assistente(api_key, temp_value)
+                    analyzer = resolve_assistente(api_key, temp_value, model_id)
                                         
                     logger_visual.info("Enviando prompt de análise estratégica...")
                     res = analyzer.chat(
@@ -332,7 +346,7 @@ if len(st.session_state.messages) > 0 and st.session_state.messages[-1]["role"] 
     with st.chat_message("assistant"):
         with st.spinner("Preparando resposta..."):
             logger_visual.info("Gerando resposta baseada no histórico do chat...")
-            analyzer = resolve_assistente(api_key, temp_value)
+            analyzer = resolve_assistente(api_key, temp_value, model_id)
             analise_contexto = st.session_state.messages[0]["content"]
             hist = f"CONTEXTO DA ANÁLISE:\n{analise_contexto}"
             response = analyzer.chat(st.session_state.cv_content, job_desc, hist, st.session_state.messages[-1]["content"], st.session_state.tom_estilo)
