@@ -4,7 +4,7 @@
 
 
 
-Este projeto é um **assistente inteligente** desenvolvido para ajudar candidatos a otimizarem seus currículos para vagas específicas, utilizando o poder da IA (Gemini 2.0 Flash).
+Este projeto é um **assistente inteligente** desenvolvido para ajudar candidatos a otimizarem seus currículos para vagas específicas, utilizando o poder da IA (Gemini 2.0 Flash e Gemini 3 Flash (Preview)).
 
 <img width="1908" height="1007" alt="image" src="https://github.com/user-attachments/assets/e1534d72-adb3-4c02-a847-84b5743d32d8" />
 
@@ -18,6 +18,8 @@ A aplicação analisa a compatibilidade entre um **currículo (PDF)** e uma **de
 * **Gaps Técnicos:** Identificação de lacunas e como compensá-las. ⚠️
 * **Plano de Ação:** Sugestões práticas de palavras-chave e reescrita de experiências (Método STAR). 💡
 * **Relatório PDF:** Geração de um documento profissional com todas as sugestões. 📄
+* **Inspeção:** Você pode ver o log e o prompt executado. 🔥
+* **Storytelling:** Ajuda com narrativas de resolução de problemas e evolução profissional.🔥
 
 ## 🎯 Intenção
 A intenção deste projeto é servir como uma ferramenta de **apoio e mentoria**. O foco não é apenas dar uma nota, mas oferecer **sugestões construtivas** para que o usuário entenda como o mercado (e os sistemas de triagem ATS) podem interpretar seu perfil.
@@ -191,7 +193,7 @@ components/: Foca nos elementos da interface visual (UI) do Streamlit, garantind
 
 ### 7.🔐 Guia de API Key (Google AI Studio)
 
-A aplicação utiliza o modelo **Gemini 2.0 Flash**. Para obter sua chave gratuita, siga estes passos:
+A aplicação utiliza o modelo **Gemini 2.0 Flash** e **Gemini 3 Flash (Preview)**. Para obter sua chave gratuita, siga estes passos:
 
 1.  Acesse o [Google AI Studio](https://aistudio.google.com/).
 
